@@ -1,6 +1,41 @@
 # ----------- STAGE 1: Build environment -----------
 FROM php:8.3-fpm-alpine AS build
 
+<<<<<<< HEAD
+<<<<<<< HEAD
+    WORKDIR /var/www
+    
+    # Cài dependency để build PHP extensions
+    RUN apk add --no-cache \
+        bash git zip unzip curl autoconf g++ make linux-headers \
+        libpng-dev libjpeg-turbo-dev freetype-dev \
+        oniguruma-dev libzip-dev openssl-dev \
+     && docker-php-ext-configure gd --with-freetype --with-jpeg \
+     && docker-php-ext-install pdo_mysql mbstring zip bcmath gd pcntl \
+     && pecl install swoole \
+     && docker-php-ext-enable swoole
+    
+    # Copy composer trước để cache dependency layer
+    COPY composer.json composer.lock ./
+    RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+    COPY . .
+    RUN composer install --no-dev --optimize-autoloader
+    
+    
+    
+    # ----------- STAGE 2: Runtime environment -----------
+    FROM php:8.3-cli-alpine
+    WORKDIR /var/www
+    
+    COPY --from=build /var/www /var/www
+    
+    EXPOSE 8000
+    CMD ["php", "artisan", "octane:start", "--server=swoole", "--host=0.0.0.0", "--port=8000"]
+<<<<<<< HEAD
+=======
+=======
+=======
+>>>>>>> b0a14ff (update dockerfile)
 WORKDIR /var/www
 
 # Cài dependency để build PHP extensions
@@ -29,3 +64,41 @@ COPY --from=build /var/www /var/www
 
 EXPOSE 8000
 CMD ["php", "artisan", "octane:start", "--server=swoole", "--host=0.0.0.0", "--port=8000"]
+<<<<<<< HEAD
+>>>>>>> a8e789c (hotfix docker)
+<<<<<<< HEAD
+>>>>>>> 1c7c666 (hotfix docker)
+=======
+=======
+=======
+    WORKDIR /var/www
+    
+    # Cài dependency để build PHP extensions
+    RUN apk add --no-cache \
+        bash git zip unzip curl autoconf g++ make linux-headers \
+        libpng-dev libjpeg-turbo-dev freetype-dev \
+        oniguruma-dev libzip-dev openssl-dev \
+     && docker-php-ext-configure gd --with-freetype --with-jpeg \
+     && docker-php-ext-install pdo_mysql mbstring zip bcmath gd pcntl \
+     && pecl install swoole \
+     && docker-php-ext-enable swoole
+    
+    # Copy composer trước để cache dependency layer
+    COPY composer.json composer.lock ./
+    RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+    COPY . .
+    RUN composer install --no-dev --optimize-autoloader
+    
+    
+    
+    # ----------- STAGE 2: Runtime environment -----------
+    FROM php:8.3-cli-alpine
+    WORKDIR /var/www
+    
+    COPY --from=build /var/www /var/www
+    
+    EXPOSE 8000
+    CMD ["php", "artisan", "octane:start", "--server=swoole", "--host=0.0.0.0", "--port=8000"]
+>>>>>>> 7a07455 (update dockerfile)
+>>>>>>> b0a14ff (update dockerfile)
+>>>>>>> f604874 (update dockerfile)
