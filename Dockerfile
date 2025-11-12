@@ -24,8 +24,12 @@ WORKDIR /var/www
 
 COPY --from=build /var/www /var/www
 
-RUN apk add --no-cache bash libzip libpng oniguruma openssl \
-    && docker-php-ext-install pdo_mysql mbstring zip bcmath \
+RUN apk add --no-cache \
+    bash \
+    libzip \
+    libpng \
+    oniguruma \
+    openssl \
     && pecl install swoole \
     && docker-php-ext-enable swoole
 
