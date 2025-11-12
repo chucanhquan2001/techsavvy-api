@@ -20,7 +20,10 @@ RUN composer install --no-dev --optimize-autoloader
 FROM php:8.3-cli-alpine
 WORKDIR /var/www
 
-RUN apk add --no-cache bash libpng libzip oniguruma openssl
+RUN apk add --no-cache \
+    bash libpng libjpeg-turbo freetype \
+    libzip oniguruma openssl \
+    libstdc++
 
 COPY --from=build /var/www /var/www
 COPY --from=build /usr/local/lib/php/extensions /usr/local/lib/php/extensions
