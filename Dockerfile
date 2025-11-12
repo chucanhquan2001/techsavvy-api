@@ -1,6 +1,5 @@
 # ----------- STAGE 1: Build environment -----------
 FROM php:8.3-cli-alpine AS build
-
 WORKDIR /var/www
 
 RUN apk add --no-cache \
@@ -17,22 +16,16 @@ RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local
 COPY . .
 RUN composer install --no-dev --optimize-autoloader
 
-
 # ----------- STAGE 2: Runtime environment -----------
 FROM php:8.3-cli-alpine
 WORKDIR /var/www
 
-COPY --from=build /var/www /var/www
+RUN apk add --no-cache bash libpng libzip oniguruma openssl
 
-RUN apk add --no-cache \
-    bash \
-    libzip \
-    libpng \
-    oniguruma \
-    openssl \
-    && pecl install swoole \
-    && docker-php-ext-enable swoole
+COPY --from=build /var/www /var/www
+COPY --from=build /usr/local/lib/php/extensions /usr/local/lib/php/extensions
+COPY --from=build /usr/local/etc/php/conf.d /usr/local/etc/php/conf.d
 
 EXPOSE 8000
 
-CMD ["php", "vendor/bin/octane", "start", "--server=swoole", "--host=0.0.0.0", "--port=8000", "--no-interaction"]
+CMD ["php", "artisan", "octane:start", "--server=swoole", "--host=0.0.0.0", "--port=8000"]    
