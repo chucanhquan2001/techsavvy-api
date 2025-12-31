@@ -12,7 +12,8 @@ RUN apk add --no-cache \
     && docker-php-ext-enable swoole
 
 COPY composer.json composer.lock ./
-RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer && \
+    composer install --no-dev --no-scripts --no-autoloader --prefer-dist
 COPY . .
 RUN composer install --no-dev --optimize-autoloader
 
