@@ -1,3 +1,5 @@
+FROM phpswoole/swoole:php8.3-alpine AS swoole
+
 # -------- STAGE 1: Build --------
 FROM php:8.3-cli-alpine AS build
 WORKDIR /var/www
