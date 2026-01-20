@@ -31,7 +31,8 @@ WORKDIR /var/www
 
 RUN apk add --no-cache \
     bash libpng libjpeg-turbo freetype \
-    libzip oniguruma openssl libstdc++
+    libzip oniguruma openssl libstdc++ \
+    libpq
 
 COPY --from=build /var/www /var/www
 COPY --from=build /usr/local/lib/php/extensions /usr/local/lib/php/extensions
