@@ -1,5 +1,3 @@
-version: "3.9"
-
 services:
   app:
     build:
@@ -11,10 +9,15 @@ services:
     ports:
       - "${OCTANE_PORT:-8000}:8000"
     depends_on:
-      - db
+      db:
+        condition: service_healthy
     networks:
       - laravel
     restart: unless-stopped
+    # Limit memory for container
+    mem_limit: 512m
+    # Shared memory for Octane
+    shm_size: 64m
 
   db:
     image: mysql:8.0
@@ -33,9 +36,29 @@ services:
     networks:
       - laravel
     restart: unless-stopped
+    # LIMIT RAM for MySQL - critical for 2GB VPS
+    command:
+      - --innodb-buffer-pool-size=64M
+      - --max-connections=20
+      - --performance-schema=0
+      - --skip-name-resolve
+      - --query-cache-type=0
+      - --query-cache-size=0
+      - --tmp-table-size=16M
+      - --max-heap-table-size=16M
+      - --innodb-log-file-size=16M
+      - --innodb-flush-log-at-trx-commit=2
+      - --innodb-flush-method=O_DIRECT
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p${DB_ROOT_PASSWORD}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
 
 networks:
   laravel:
+    driver: bridge
 
 volumes:
   db_data:
