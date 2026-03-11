@@ -31,13 +31,13 @@ RUN curl -sS https://getcomposer.org/installer | php -- \
 COPY composer.json composer.lock ./
 
 # Install dependencies - skip scripts, use dist for faster download
-RUN composer install --no-dev --prefer-dist --no-scripts --no-interaction --no-cache-dir
+RUN composer install --no-dev --prefer-dist --no-scripts --no-interaction
 
 # Copy source code
 COPY . .
 
 # Generate optimized autoload
-RUN composer dump-autoload --optimize --no-interaction --no-cache-dir
+RUN composer dump-autoload --optimize --no-interaction
 
 
 # ============ STAGE 2: Runtime ============
