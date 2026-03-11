@@ -54,8 +54,12 @@ RUN apk add --no-cache \
     freetype \
     libzip \
     oniguruma \
-    libpq \
-    php83-pcntl
+    libpq && \
+    apk add --no-cache --virtual .build-deps \
+    $PHPIZE_DEPS \
+    linux-headers && \
+    docker-php-ext-install pcntl && \
+    apk del .build-deps
 
 # Copy application from builder
 COPY --from=builder /var/www /var/www
