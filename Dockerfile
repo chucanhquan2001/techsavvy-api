@@ -54,10 +54,8 @@ RUN apk add --no-cache \
     freetype \
     libzip \
     oniguruma \
-    libpq
-
-# Ensure pcntl extension is enabled (required for Octane)
-RUN docker-php-ext-enable pcntl 2>/dev/null || true
+    libpq \
+    php83-pcntl
 
 # Copy application from builder
 COPY --from=builder /var/www /var/www
