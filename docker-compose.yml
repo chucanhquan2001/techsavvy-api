@@ -42,13 +42,10 @@ services:
       - --max-connections=20
       - --performance-schema=0
       - --skip-name-resolve
-      - --query-cache-type=0
-      - --query-cache-size=0
       - --tmp-table-size=16M
       - --max-heap-table-size=16M
       - --innodb-log-file-size=16M
       - --innodb-flush-log-at-trx-commit=2
-      - --innodb-flush-method=O_DIRECT
     healthcheck:
       test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p${DB_ROOT_PASSWORD}"]
       interval: 10s
