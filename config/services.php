@@ -19,7 +19,12 @@ return [
     ],
 
     'resend' => [
-        'key' => env('RESEND_KEY'),
+        'key' => env('RESEND_API_KEY'),
+    ],
+
+    'contact_notification' => [
+        'recipient_email' => env('CONTACT_NOTIFICATION_EMAIL'),
+        'recipient_name' => env('CONTACT_NOTIFICATION_NAME', 'Admin'),
     ],
 
     'ses' => [
