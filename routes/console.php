@@ -10,5 +10,5 @@ Artisan::command('inspire', function () {
 
 Schedule::command('market:sync-prices')
     ->timezone((string) config('app.timezone', 'Asia/Ho_Chi_Minh'))
-    ->dailyAt((string) config('services.market_data.schedule_time', '07:00'))
+    ->everyTenMinutes()
     ->withoutOverlapping();
