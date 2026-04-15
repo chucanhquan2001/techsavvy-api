@@ -19,6 +19,23 @@ services:
     # Shared memory for Octane
     shm_size: 64m
 
+  scheduler:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: ${APP_NAME}_scheduler
+    env_file:
+      - .env
+    command: >
+      sh -c "while true; do php artisan schedule:run --no-interaction; sleep 60; done"
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - laravel
+    restart: unless-stopped
+    mem_limit: 256m
+
   db:
     image: mysql:8.0
     container_name: ${APP_NAME}_db
