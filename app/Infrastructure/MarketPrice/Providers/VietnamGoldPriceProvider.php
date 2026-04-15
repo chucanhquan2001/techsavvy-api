@@ -19,8 +19,12 @@ class VietnamGoldPriceProvider extends AbstractHybridProvider implements MarketP
         $sourceType = 'api';
 
         $json = $this->loadJson($config['api_url'] ?? null);
-        $sjcBuy = $this->toFloat(data_get($json, 'sjc.buy'));
-        $sjcSell = $this->toFloat(data_get($json, 'sjc.sell'));
+        $sjcBuy = $this->toFloat(data_get($json, 'sjc.buy'))
+            ?? $this->toFloat(data_get($json, 'buy'))
+            ?? $this->toFloat(data_get($json, 'results.0.buy_1l'));
+        $sjcSell = $this->toFloat(data_get($json, 'sjc.sell'))
+            ?? $this->toFloat(data_get($json, 'sell'))
+            ?? $this->toFloat(data_get($json, 'results.0.sell_1l'));
 
         if ($sjcBuy === null && $sjcSell === null) {
             $sourceType = 'scrape';

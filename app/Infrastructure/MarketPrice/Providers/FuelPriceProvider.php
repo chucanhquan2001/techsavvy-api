@@ -25,8 +25,8 @@ class FuelPriceProvider extends AbstractHybridProvider implements MarketPricePro
         if ($ron95 === null && $diesel === null) {
             $sourceType = 'scrape';
             $html = $this->loadHtml($config['scrape_url'] ?? null);
-            $ron95 = $this->numberFromHtml($html, '/ron95[^0-9]*([0-9]+(?:[.,][0-9]+)?)/i');
-            $diesel = $this->numberFromHtml($html, '/diesel[^0-9]*([0-9]+(?:[.,][0-9]+)?)/i');
+            $ron95 = $this->extractVndPrice($html, '/x[aă]ng\s*ron\s*95[^0-9]*([0-9][0-9.,]*)/iu');
+            $diesel = $this->extractVndPrice($html, '/d[aà]u\s*do[^0-9]*([0-9][0-9.,]*)/iu');
         }
 
         $records = [];
@@ -58,5 +58,19 @@ class FuelPriceProvider extends AbstractHybridProvider implements MarketPricePro
         }
 
         return $records;
+    }
+
+    private function extractVndPrice(?string $html, string $pattern): ?float
+    {
+        if (blank($html) || ! preg_match($pattern, $html, $matches)) {
+            return null;
+        }
+
+        $digitsOnly = preg_replace('/\D+/', '', $matches[1] ?? '');
+        if ($digitsOnly === null || $digitsOnly === '') {
+            return null;
+        }
+
+        return (float) $digitsOnly;
     }
 }
