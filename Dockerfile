@@ -22,6 +22,9 @@ RUN apk add --no-cache \
     libzip-dev \
     openssl-dev
 
+# Required by php-amqplib/php-amqplib (^3.7)
+RUN docker-php-ext-install sockets
+
 # Install Composer
 RUN curl -sS https://getcomposer.org/installer | php -- \
     --install-dir=/usr/local/bin --filename=composer
@@ -58,7 +61,7 @@ RUN apk add --no-cache \
     apk add --no-cache --virtual .build-deps \
     $PHPIZE_DEPS \
     linux-headers && \
-    docker-php-ext-install pcntl && \
+    docker-php-ext-install pcntl sockets && \
     apk del .build-deps
 
 # Copy application from builder
