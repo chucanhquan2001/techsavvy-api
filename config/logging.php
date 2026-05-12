@@ -82,6 +82,36 @@ return [
             'replace_placeholders' => true,
         ],
 
+        'slack_alerts' => [
+            'driver' => 'slack',
+            'url' => env('LOG_SLACK_ALERTS_WEBHOOK_URL'),
+            'username' => env('LOG_SLACK_USERNAME', 'Techsavvy Worker'),
+            'emoji' => ':rotating_light:',
+            'level' => 'error',
+            'replace_placeholders' => true,
+        ],
+
+        'slack_info' => [
+            'driver' => 'slack',
+            'url' => env('LOG_SLACK_INFO_WEBHOOK_URL'),
+            'username' => env('LOG_SLACK_USERNAME', 'Techsavvy Worker'),
+            'emoji' => ':white_check_mark:',
+            'level' => 'info',
+            'replace_placeholders' => true,
+        ],
+
+        'job_info_stack' => [
+            'driver' => 'stack',
+            'channels' => ['single', 'slack_info'],
+            'ignore_exceptions' => false,
+        ],
+
+        'job_alert_stack' => [
+            'driver' => 'stack',
+            'channels' => ['single', 'slack_alerts'],
+            'ignore_exceptions' => false,
+        ],
+
         'papertrail' => [
             'driver' => 'monolog',
             'level' => env('LOG_LEVEL', 'debug'),
