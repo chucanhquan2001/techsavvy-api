@@ -6,6 +6,7 @@ use App\Application\MarketPrice\UseCases\SyncMarketPricesUseCase;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
 use Illuminate\Support\Facades\Log;
+use Throwable;
 
 class SyncMarketPricesJob implements ShouldQueue
 {
@@ -15,6 +16,14 @@ class SyncMarketPricesJob implements ShouldQueue
     {
         $result = $useCase->execute();
 
-        Log::info('Market price sync completed', $result);
+        Log::channel('job_info_stack')->info('Market price sync completed', $result);
+    }
+
+    public function failed(Throwable $e): void
+    {
+        Log::channel('job_alert_stack')->error('Market price sync failed', [
+            'exception' => $e->getMessage(),
+            'trace' => $e->getTraceAsString(),
+        ]);
     }
 }

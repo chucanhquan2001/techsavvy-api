@@ -35,6 +35,31 @@ services:
       - laravel
     restart: unless-stopped
     mem_limit: 256m
+  
+  worker:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: ${APP_NAME}_worker
+    env_file:
+      - .env
+    command: >
+      php artisan queue:work rabbitmq
+      --queue=default
+      --sleep=3
+      --tries=3
+      --backoff=10
+      --max-time=3600
+      --max-jobs=1000
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - laravel
+    restart: unless-stopped
+    mem_limit: 256m
+    stop_signal: SIGTERM
+    stop_grace_period: 60s
 
   db:
     image: mysql:8.0
