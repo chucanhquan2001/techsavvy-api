@@ -1,0 +1,19 @@
+# Production override: pull pre-built images from Docker Hub (no build on VPS).
+# Deploy with: docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d
+# Set in server .env: DOCKER_IMAGE=chucanhquan/techsavvy-api, IMAGE_TAG=latest
+
+services:
+  app:
+    build: !reset
+    image: ${DOCKER_IMAGE:-chucanhquan/techsavvy-api}:${IMAGE_TAG:-latest}
+    pull_policy: always
+
+  scheduler:
+    build: !reset
+    image: ${DOCKER_IMAGE:-chucanhquan/techsavvy-api}:${IMAGE_TAG:-latest}
+    pull_policy: always
+
+  worker:
+    build: !reset
+    image: ${DOCKER_IMAGE:-chucanhquan/techsavvy-api}:${IMAGE_TAG:-latest}
+    pull_policy: always

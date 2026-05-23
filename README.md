@@ -57,3 +57,59 @@ If you discover a security vulnerability within Laravel, please send an e-mail t
 ## License
 
 The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+
+## Deployment (GitHub Actions + Docker Hub + Portainer)
+
+CI/CD runs on GitHub Actions: tests and Pint on every push/PR to `main`; on push to `main`, the workflow builds a Docker image, pushes it to Docker Hub (`chucanhquan/techsavvy-api`), and triggers a Portainer stack webhook to redeploy on the VPS.
+
+### GitHub repository secrets
+
+| Secret | Required | Description |
+|--------|----------|-------------|
+| `DOCKERHUB_USERNAME` | Yes (deploy) | Docker Hub username, e.g. `chucanhquan` |
+| `DOCKERHUB_TOKEN` | Yes (deploy) | Docker Hub access token (Read/Write) from Account Settings → Security |
+| `PORTAINER_WEBHOOK_URL` | For auto-deploy | Stack webhook URL from Portainer. If unset, the image is still pushed but deploy is skipped. |
+
+Create the token at [hub.docker.com](https://hub.docker.com) → Account Settings → Security → New Access Token. Do not commit the token to the repository.
+
+### One-time Portainer setup (VPS)
+
+1. **Registry** — Not required for a **public** image on Docker Hub; the VPS can pull without registry credentials in Portainer.
+
+2. **Stack** — Create a stack with compose files from this repo:
+   - `docker-compose.yml`
+   - `docker-compose.prod.yml`
+   - Compose command (or equivalent in Portainer): `docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d`
+
+3. **Server `.env`** (on the VPS, not committed) — include at least:
+   - `APP_ENV=production`, `APP_DEBUG=false`, `APP_KEY=...`
+   - Database and app settings from `.env.example`
+   - `DOCKER_IMAGE=chucanhquan/techsavvy-api`
+   - `IMAGE_TAG=latest`
+
+4. **Webhook** — Stack → Webhooks → enable → copy the URL → add as GitHub secret `PORTAINER_WEBHOOK_URL`.
+
+   Portainer must be reachable from GitHub Actions (public HTTPS URL or VPN). The webhook redeploy pulls the new image and recreates `app`, `scheduler`, and `worker`; MySQL (`db`) is unchanged.
+
+### After deploy (migrations / cache)
+
+The webhook does not run Artisan commands. After a release that includes migrations:
+
+```bash
+docker compose exec -T app php artisan migrate --force
+docker compose exec -T app php artisan config:cache
+docker compose exec -T app php artisan route:cache
+```
+
+### Rollback
+
+Set `IMAGE_TAG` on the server to a previous commit SHA (images are tagged `chucanhquan/techsavvy-api:<sha>` on Docker Hub), update the stack, or redeploy from Portainer.
+
+### Local Docker
+
+```bash
+docker compose build
+docker compose up -d
+```
+
+Uses local image tag `local/techsavvy-api:local` by default. Override with `DOCKER_IMAGE` and `IMAGE_TAG` if needed.

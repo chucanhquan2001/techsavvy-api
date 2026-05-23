@@ -1,5 +1,6 @@
 services:
   app:
+    image: ${DOCKER_IMAGE:-local/techsavvy-api}:${IMAGE_TAG:-local}
     build:
       context: .
       dockerfile: Dockerfile
@@ -20,6 +21,7 @@ services:
     shm_size: 64m
 
   scheduler:
+    image: ${DOCKER_IMAGE:-local/techsavvy-api}:${IMAGE_TAG:-local}
     build:
       context: .
       dockerfile: Dockerfile
@@ -37,6 +39,7 @@ services:
     mem_limit: 256m
   
   worker:
+    image: ${DOCKER_IMAGE:-local/techsavvy-api}:${IMAGE_TAG:-local}
     build:
       context: .
       dockerfile: Dockerfile
