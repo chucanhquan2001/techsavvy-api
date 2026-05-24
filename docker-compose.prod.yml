@@ -1,19 +1,34 @@
 # Production override: pull pre-built images from Docker Hub (no build on VPS).
-# Deploy with: docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d
-# Set in server .env: DOCKER_IMAGE=chucanhquan/techsavvy-api, IMAGE_TAG=latest
+# Deploy: docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d
+#
+# Runtime secrets live on the VPS host (not in Git / not in Portainer clone dir):
+#   /etc/techsavvy-api/.env  (chmod 600)
+#
+# Portainer stack.env (non-secret compose vars): APP_NAME, DOCKER_IMAGE, IMAGE_TAG,
+# DB_ROOT_PASSWORD (for MySQL healthcheck ${...} in base compose).
 
 services:
   app:
     build: !reset
     image: ${DOCKER_IMAGE:-chucanhquan/techsavvy-api}:${IMAGE_TAG:-latest}
     pull_policy: always
+    env_file: !reset
+      - ${ENV_FILE:-/etc/techsavvy-api/.env}
 
   scheduler:
     build: !reset
     image: ${DOCKER_IMAGE:-chucanhquan/techsavvy-api}:${IMAGE_TAG:-latest}
     pull_policy: always
+    env_file: !reset
+      - ${ENV_FILE:-/etc/techsavvy-api/.env}
 
   worker:
     build: !reset
     image: ${DOCKER_IMAGE:-chucanhquan/techsavvy-api}:${IMAGE_TAG:-latest}
     pull_policy: always
+    env_file: !reset
+      - ${ENV_FILE:-/etc/techsavvy-api/.env}
+
+  db:
+    env_file: !reset
+      - ${ENV_FILE:-/etc/techsavvy-api/.env}
