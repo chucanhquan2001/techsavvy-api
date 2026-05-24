@@ -20,7 +20,7 @@ class ContactCreatedMail extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'New contact #' . $this->contactId
+            subject: 'New contact #'.$this->contactId
         );
     }
 

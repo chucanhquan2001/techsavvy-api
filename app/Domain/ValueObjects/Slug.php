@@ -10,7 +10,7 @@ final class Slug
             throw new \InvalidArgumentException('Slug cannot be empty');
         }
     }
-    
+
     public function value(): string
     {
         return $this->value;
@@ -19,6 +19,7 @@ final class Slug
     public static function fromTitle(string $title): self
     {
         $slug = strtolower(trim(preg_replace('/[^A-Za-z0-9-]+/', '-', $title), '-'));
+
         return new self($slug);
     }
 

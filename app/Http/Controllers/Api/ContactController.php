@@ -20,8 +20,7 @@ class ContactController extends Controller
         StoreContactRequest $request,
         CreateContactUseCase $useCase,
         ContactNotificationService $notificationService
-    )
-    {
+    ) {
         try {
             $command = new CreateContactCommand(
                 userId: (int) $request->input('user_id'),

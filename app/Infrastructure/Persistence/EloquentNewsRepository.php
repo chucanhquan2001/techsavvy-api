@@ -2,8 +2,8 @@
 
 namespace App\Infrastructure\Persistence;
 
-use App\Domain\Repositories\NewsRepositoryInterface;
 use App\Domain\Entities\News;
+use App\Domain\Repositories\NewsRepositoryInterface;
 use App\Domain\ValueObjects\Slug;
 use App\Models\News as EloquentNews;
 
@@ -12,6 +12,7 @@ class EloquentNewsRepository implements NewsRepositoryInterface
     public function findById(int $id): ?News
     {
         $model = EloquentNews::find($id);
+
         return $model ? $this->toEntity($model) : null;
     }
 
@@ -24,9 +25,10 @@ class EloquentNewsRepository implements NewsRepositoryInterface
     {
         $model = EloquentNews::create([
             'title' => $news->title,
-            'slug' => (string)$news->slug,
+            'slug' => (string) $news->slug,
             'content' => $news->content,
         ]);
+
         return $this->toEntity($model);
     }
 
@@ -35,9 +37,10 @@ class EloquentNewsRepository implements NewsRepositoryInterface
         $model = EloquentNews::findOrFail($news->id);
         $model->update([
             'title' => $news->title,
-            'slug' => (string)$news->slug,
+            'slug' => (string) $news->slug,
             'content' => $news->content,
         ]);
+
         return $this->toEntity($model);
     }
 

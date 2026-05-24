@@ -15,7 +15,7 @@ class WorldGoldPriceProvider extends AbstractHybridProvider implements MarketPri
     public function fetch(): array
     {
         $config = config('services.market_data.providers.world_gold', []);
-        $quotedAt = new \DateTimeImmutable();
+        $quotedAt = new \DateTimeImmutable;
         $price = null;
         $sourceType = 'api';
 

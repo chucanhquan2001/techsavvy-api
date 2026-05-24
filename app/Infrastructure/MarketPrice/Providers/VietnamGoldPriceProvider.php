@@ -15,7 +15,7 @@ class VietnamGoldPriceProvider extends AbstractHybridProvider implements MarketP
     public function fetch(): array
     {
         $config = config('services.market_data.providers.vn_gold', []);
-        $quotedAt = new \DateTimeImmutable();
+        $quotedAt = new \DateTimeImmutable;
         $sourceType = 'api';
 
         $json = $this->loadJson($config['api_url'] ?? null);

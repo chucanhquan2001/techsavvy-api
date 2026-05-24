@@ -15,7 +15,7 @@ class BitcoinPriceProvider extends AbstractHybridProvider implements MarketPrice
     public function fetch(): array
     {
         $config = config('services.market_data.providers.bitcoin', []);
-        $quotedAt = new \DateTimeImmutable();
+        $quotedAt = new \DateTimeImmutable;
         $price = null;
         $sourceType = 'api';
 

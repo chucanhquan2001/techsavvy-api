@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Log;
 class SyncMarketPricesUseCase
 {
     /**
-     * @param array<MarketPriceProviderInterface> $providers
+     * @param  array<MarketPriceProviderInterface>  $providers
      */
     public function __construct(
         private readonly array $providers,

@@ -15,7 +15,7 @@ class FuelPriceProvider extends AbstractHybridProvider implements MarketPricePro
     public function fetch(): array
     {
         $config = config('services.market_data.providers.fuel', []);
-        $quotedAt = new \DateTimeImmutable();
+        $quotedAt = new \DateTimeImmutable;
         $sourceType = 'api';
 
         $json = $this->loadJson($config['api_url'] ?? null);

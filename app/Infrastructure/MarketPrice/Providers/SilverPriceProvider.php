@@ -15,7 +15,7 @@ class SilverPriceProvider extends AbstractHybridProvider implements MarketPriceP
     public function fetch(): array
     {
         $config = config('services.market_data.providers.silver', []);
-        $quotedAt = new \DateTimeImmutable();
+        $quotedAt = new \DateTimeImmutable;
         $price = null;
         $sourceType = 'api';
 

@@ -15,7 +15,7 @@ class TrackUserVisitUseCase
 
     public function execute(TrackUserVisitCommand $command): UserVisitDTO
     {
-        $now = new \DateTimeImmutable();
+        $now = new \DateTimeImmutable;
 
         $entity = new UserVisit(
             id: 0,

@@ -13,10 +13,7 @@ class News
         public Slug $slug,
         public \DateTimeImmutable $createdAt,
         public \DateTimeImmutable $updatedAt
-    )
-    {
-        
-    }
+    ) {}
 
     public function rename(string $title): void
     {

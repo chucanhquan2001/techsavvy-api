@@ -21,7 +21,7 @@ class NewsDTO
             $news->id,
             $news->title,
             $news->content,
-            (string)$news->slug,
+            (string) $news->slug,
             $news->createdAt->format('Y-m-d H:i:s'),
             $news->updatedAt->format('Y-m-d H:i:s')
         );
