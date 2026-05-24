@@ -1,9 +1,15 @@
 <?php
 
+use App\Helpers\ApiResponse;
 use App\Http\Controllers\Api\ContactController;
 use App\Http\Controllers\Api\NewsController;
 use App\Http\Controllers\Api\UserVisitController;
 use Illuminate\Support\Facades\Route;
+
+Route::get('/ping', fn () => ApiResponse::ok([
+    'service' => config('app.name'),
+    'environment' => config('app.env'),
+], 'pong'));
 
 Route::prefix('news')->group(function () {
     Route::get('/', [NewsController::class, 'index']);
