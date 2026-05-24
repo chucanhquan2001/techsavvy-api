@@ -13,12 +13,15 @@ class UpdateNewsUseCase
     public function execute(UpdateNewsCommand $cmd): ?NewsDTO
     {
         $news = $this->repo->findById($cmd->id);
-        if (!$news) return null;
+        if (! $news) {
+            return null;
+        }
 
         $news->rename($cmd->title);
         $news->content = $cmd->content;
 
         $updated = $this->repo->update($news);
+
         return NewsDTO::fromEntity($updated);
     }
 }

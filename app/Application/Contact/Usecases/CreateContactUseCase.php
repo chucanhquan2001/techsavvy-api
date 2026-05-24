@@ -13,7 +13,7 @@ class CreateContactUseCase
 
     public function execute(CreateContactCommand $command): ContactDTO
     {
-        $now = new \DateTimeImmutable();
+        $now = new \DateTimeImmutable;
 
         $contact = new Contact(
             id: 0,

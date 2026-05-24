@@ -1,9 +1,9 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\ContactController;
 use App\Http\Controllers\Api\NewsController;
 use App\Http\Controllers\Api\UserVisitController;
+use Illuminate\Support\Facades\Route;
 
 Route::prefix('news')->group(function () {
     Route::get('/', [NewsController::class, 'index']);

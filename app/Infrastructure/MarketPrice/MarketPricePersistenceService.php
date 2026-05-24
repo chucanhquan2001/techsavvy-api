@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\DB;
 class MarketPricePersistenceService
 {
     /**
-     * @param array<MarketPriceRecord> $records
+     * @param  array<MarketPriceRecord>  $records
      */
     public function persist(array $records): void
     {

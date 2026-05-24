@@ -11,6 +11,6 @@ class GetNewsListUseCase
 
     public function execute(): array
     {
-        return array_map(fn($news) => NewsDTO::fromEntity($news), $this->repo->findAll());
+        return array_map(fn ($news) => NewsDTO::fromEntity($news), $this->repo->findAll());
     }
 }

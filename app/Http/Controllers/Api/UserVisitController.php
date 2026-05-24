@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
 use App\Application\UserVisit\Commands\TrackUserVisitCommand;
 use App\Application\UserVisit\Usecases\TrackUserVisitUseCase;
-use App\Services\RequestInfoExtractor;
-use Illuminate\Http\Request;
 use App\Enums\HttpStatus;
 use App\Helpers\ApiResponse;
+use App\Http\Controllers\Controller;
+use App\Services\RequestInfoExtractor;
+use Illuminate\Http\Request;
 use Throwable;
 
 class UserVisitController extends Controller

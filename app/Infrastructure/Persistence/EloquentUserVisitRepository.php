@@ -5,7 +5,6 @@ namespace App\Infrastructure\Persistence;
 use App\Domain\Entities\UserVisit as DomainUserVisit;
 use App\Domain\Repositories\UserVisitRepositoryInterface;
 use App\Models\UserVisit as ModelUserVisit;
-use Illuminate\Pagination\LengthAwarePaginator;
 
 class EloquentUserVisitRepository implements UserVisitRepositoryInterface
 {
@@ -38,6 +37,7 @@ class EloquentUserVisitRepository implements UserVisitRepositoryInterface
     public function findById(int $id): ?DomainUserVisit
     {
         $model = ModelUserVisit::find($id);
+
         return $model ? $this->toDomain($model) : null;
     }
 
@@ -55,18 +55,20 @@ class EloquentUserVisitRepository implements UserVisitRepositoryInterface
             ->orderBy('created_at', 'desc')
             ->get();
 
-        return $models->map(fn($m) => $this->toDomain($m))->all();
+        return $models->map(fn ($m) => $this->toDomain($m))->all();
     }
 
     public function findByFbclid(string $fbclid): ?DomainUserVisit
     {
         $model = ModelUserVisit::where('fbclid', $fbclid)->first();
+
         return $model ? $this->toDomain($model) : null;
     }
 
     public function findByGclid(string $gclid): ?DomainUserVisit
     {
         $model = ModelUserVisit::where('gclid', $gclid)->first();
+
         return $model ? $this->toDomain($model) : null;
     }
 

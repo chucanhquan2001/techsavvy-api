@@ -2,20 +2,16 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use App\Application\News\UseCases\{
-    CreateNewsUseCase,
-    GetNewsListUseCase,
-    UpdateNewsUseCase,
-    DeleteNewsUseCase
-};
-use App\Application\News\Commands\{
-    CreateNewsCommand,
-    UpdateNewsCommand
-};
+use App\Application\News\Commands\CreateNewsCommand;
+use App\Application\News\Commands\UpdateNewsCommand;
+use App\Application\News\UseCases\CreateNewsUseCase;
+use App\Application\News\UseCases\DeleteNewsUseCase;
+use App\Application\News\UseCases\GetNewsListUseCase;
+use App\Application\News\UseCases\UpdateNewsUseCase;
 use App\Enums\HttpStatus;
 use App\Helpers\ApiResponse;
+use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
 use Throwable;
 
 class NewsController extends Controller
@@ -24,6 +20,7 @@ class NewsController extends Controller
     {
         try {
             $data = $useCase->execute();
+
             return ApiResponse::ok($data, 'List fetched successfully');
         } catch (Throwable $e) {
             return ApiResponse::error('Failed to fetch news list', $e);
@@ -35,6 +32,7 @@ class NewsController extends Controller
         try {
             $cmd = new CreateNewsCommand($req->title, $req->content);
             $news = $useCase->execute($cmd);
+
             return ApiResponse::ok($news, 'News created successfully', HttpStatus::CREATED);
         } catch (Throwable $e) {
             return ApiResponse::fail('Failed to create news', [$e->getMessage()]);
@@ -46,7 +44,10 @@ class NewsController extends Controller
         try {
             $cmd = new UpdateNewsCommand($id, $req->title, $req->content);
             $news = $useCase->execute($cmd);
-            if (!$news) return ApiResponse::fail('News not found', [], HttpStatus::NOT_FOUND);
+            if (! $news) {
+                return ApiResponse::fail('News not found', [], HttpStatus::NOT_FOUND);
+            }
+
             return ApiResponse::ok($news, 'News updated successfully');
         } catch (Throwable $e) {
             return ApiResponse::error('Update failed', $e);
@@ -57,6 +58,7 @@ class NewsController extends Controller
     {
         try {
             $useCase->execute($id);
+
             return ApiResponse::ok(null, 'Deleted successfully');
         } catch (Throwable $e) {
             return ApiResponse::error('Failed to delete', $e);

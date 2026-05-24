@@ -39,6 +39,7 @@ class RequestInfoExtractor
         // Check X-Forwarded-For header (for load balancers/proxies)
         if ($request->header('X-Forwarded-For')) {
             $ips = explode(',', $request->header('X-Forwarded-For'));
+
             return trim($ips[0]);
         }
 
@@ -56,7 +57,7 @@ class RequestInfoExtractor
      */
     public function getDeviceType(?string $userAgent): ?string
     {
-        if (!$userAgent) {
+        if (! $userAgent) {
             return null;
         }
 
@@ -66,6 +67,7 @@ class RequestInfoExtractor
             if (preg_match('/ipad|tablet|playbook|silk/i', $userAgent)) {
                 return 'tablet';
             }
+
             return 'mobile';
         }
 
@@ -81,7 +83,7 @@ class RequestInfoExtractor
      */
     public function getBrowser(?string $userAgent): ?string
     {
-        if (!$userAgent) {
+        if (! $userAgent) {
             return null;
         }
 
@@ -96,7 +98,7 @@ class RequestInfoExtractor
         if (preg_match('/firefox/i', $userAgent)) {
             return 'firefox';
         }
-        if (preg_match('/safari/i', $userAgent) && !preg_match('/chrome/i', $userAgent)) {
+        if (preg_match('/safari/i', $userAgent) && ! preg_match('/chrome/i', $userAgent)) {
             return 'safari';
         }
         if (preg_match('/opera|opera mini/i', $userAgent)) {
@@ -114,7 +116,7 @@ class RequestInfoExtractor
      */
     public function getBrowserVersion(?string $userAgent): ?string
     {
-        if (!$userAgent) {
+        if (! $userAgent) {
             return null;
         }
 
@@ -151,7 +153,7 @@ class RequestInfoExtractor
      */
     public function getPlatform(?string $userAgent): ?string
     {
-        if (!$userAgent) {
+        if (! $userAgent) {
             return null;
         }
 
@@ -173,6 +175,7 @@ class RequestInfoExtractor
             if (preg_match('/ipad/i', $userAgent)) {
                 return 'ios';
             }
+
             return 'macos';
         }
         if (preg_match('/android/i', $userAgent)) {

@@ -17,7 +17,7 @@ class ApiResponse
             'meta' => [
                 'timestamp' => now()->toISOString(),
                 'path' => request()->path(),
-            ]
+            ],
         ], $code);
     }
 
@@ -31,7 +31,7 @@ class ApiResponse
             'meta' => [
                 'timestamp' => now()->toISOString(),
                 'path' => request()->path(),
-            ]
+            ],
         ], $code);
     }
 
@@ -45,7 +45,7 @@ class ApiResponse
             'meta' => [
                 'timestamp' => now()->toISOString(),
                 'path' => request()->path(),
-            ]
+            ],
         ], $code);
     }
 
@@ -59,7 +59,7 @@ class ApiResponse
             'meta' => [
                 'timestamp' => now()->toISOString(),
                 'path' => request()->path(),
-            ]
+            ],
         ], $code);
     }
 }
