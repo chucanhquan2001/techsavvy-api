@@ -12,23 +12,23 @@ services:
     build: !reset
     image: ${DOCKER_IMAGE:-chucanhquan/techsavvy-api}:${IMAGE_TAG:-latest}
     pull_policy: always
-    env_file: !reset
+    env_file:
       - ${ENV_FILE:-/etc/env/techsavvy-api/.env}
 
   scheduler:
     build: !reset
     image: ${DOCKER_IMAGE:-chucanhquan/techsavvy-api}:${IMAGE_TAG:-latest}
     pull_policy: always
-    env_file: !reset
+    env_file:
       - ${ENV_FILE:-/etc/env/techsavvy-api/.env}
 
   worker:
     build: !reset
     image: ${DOCKER_IMAGE:-chucanhquan/techsavvy-api}:${IMAGE_TAG:-latest}
     pull_policy: always
-    env_file: !reset
+    env_file:
       - ${ENV_FILE:-/etc/env/techsavvy-api/.env}
 
   db:
-    env_file: !reset
+    env_file:
       - ${ENV_FILE:-/etc/env/techsavvy-api/.env}
