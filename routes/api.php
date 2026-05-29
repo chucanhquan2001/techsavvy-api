@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Route;
 Route::get('/ping', fn () => ApiResponse::ok([
     'service' => config('app.name'),
     'environment' => config('app.env'),
-    'cicd' => 'ok'
+    'cicd' => 'not ok'
 ], 'pong'));
 
 Route::prefix('news')->group(function () {
