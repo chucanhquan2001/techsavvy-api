@@ -5,5 +5,6 @@ return [
     App\Infrastructure\Providers\ContactServiceProvider::class,
     App\Infrastructure\Providers\MarketPriceServiceProvider::class,
     App\Infrastructure\Providers\NewsServiceProvider::class,
+    App\Infrastructure\Providers\TechDiscoveryServiceProvider::class,
     App\Infrastructure\Providers\UserVisitServiceProvider::class,
 ];
