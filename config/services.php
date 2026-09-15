@@ -60,6 +60,47 @@ return [
         ],
     ],
 
+    'tech_discovery' => [
+        'schedule_time' => env('TECH_DISCOVERY_CRAWL_TIME', '05:00'),
+        'timeout_seconds' => env('TECH_DISCOVERY_TIMEOUT', 15),
+        'retry_times' => env('TECH_DISCOVERY_RETRY', 1),
+        'user_agent' => env('TECH_DISCOVERY_USER_AGENT', 'TechSavvyBot/1.0'),
+        'github_token' => env('GITHUB_TOKEN'),
+        'feed_limit_per_source' => env('TECH_DISCOVERY_FEED_LIMIT', 10),
+        'providers' => [
+            'github_trending' => [
+                'url' => env('GITHUB_TRENDING_URL', 'https://github.com/trending?since=daily'),
+                'limit' => env('GITHUB_TRENDING_LIMIT', 15),
+            ],
+        ],
+        'feeds' => [
+            'github_blog' => [
+                'url' => 'https://github.blog/feed/',
+            ],
+            'github_changelog' => [
+                'url' => 'https://github.blog/changelog/feed/',
+            ],
+            'infoq' => [
+                'url' => 'https://feed.infoq.com/',
+            ],
+            'hacker_news_frontpage' => [
+                'url' => 'https://hnrss.org/frontpage',
+            ],
+            'dev_to' => [
+                'url' => 'https://dev.to/feed',
+            ],
+            'arxiv_ai' => [
+                'url' => 'https://rss.arxiv.org/rss/cs.AI',
+            ],
+            'arxiv_machine_learning' => [
+                'url' => 'https://rss.arxiv.org/rss/cs.LG',
+            ],
+            'arxiv_computation_language' => [
+                'url' => 'https://rss.arxiv.org/rss/cs.CL',
+            ],
+        ],
+    ],
+
     'ses' => [
         'key' => env('AWS_ACCESS_KEY_ID'),
         'secret' => env('AWS_SECRET_ACCESS_KEY'),
