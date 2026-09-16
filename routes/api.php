@@ -2,11 +2,17 @@
 
 use App\Helpers\ApiResponse;
 use App\Http\Controllers\Api\ContactController;
+use App\Http\Controllers\Api\MarketPriceController;
 use App\Http\Controllers\Api\NewsController;
 use App\Http\Controllers\Api\TechTrendController;
 use App\Http\Controllers\Api\UserVisitController;
 use Illuminate\Support\Facades\Route;
 
+/**
+ * Healthcheck / ping
+ *
+ * @group Ping
+ */
 Route::get('/ping', fn () => ApiResponse::ok([
     'service' => config('app.name'),
     'environment' => config('app.env'),
@@ -24,6 +30,12 @@ Route::prefix('news')->group(function () {
 Route::prefix('tech-trends')->group(function () {
     Route::get('/', [TechTrendController::class, 'index']);
     Route::get('/{slug}', [TechTrendController::class, 'show']);
+});
+
+Route::prefix('market-prices')->group(function () {
+    Route::get('/', [MarketPriceController::class, 'index']);
+    Route::get('/{instrument}/history', [MarketPriceController::class, 'history']);
+    Route::get('/{instrument}', [MarketPriceController::class, 'show']);
 });
 
 // Track user visits

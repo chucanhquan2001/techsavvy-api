@@ -1,0 +1,324 @@
+openapi: 3.0.3
+info:
+  title: 'Techsavvy_API API Documentation'
+  description: 'TechSavvy public API for tech trends, market prices, news, contacts, and visit tracking.'
+  version: 1.0.0
+servers:
+  -
+    url: 'http://localhost:8000'
+tags:
+  -
+    name: Contact
+    description: ''
+  -
+    name: 'Market Prices'
+    description: ''
+  -
+    name: News
+    description: ''
+  -
+    name: Ping
+    description: ''
+  -
+    name: 'Tech Trends'
+    description: ''
+  -
+    name: 'User Visits'
+    description: ''
+paths:
+  /api/contact:
+    post:
+      summary: 'Store a new contact message.'
+      operationId: storeANewContactMessage
+      description: ''
+      parameters: []
+      responses: {  }
+      tags:
+        - Contact
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                user_id:
+                  type: integer
+                  description: ''
+                  example: 17
+                content:
+                  type: string
+                  description: ''
+                  example: consequatur
+              required:
+                - user_id
+                - content
+      security: []
+  /api/market-prices:
+    get:
+      summary: ''
+      operationId: getApiMarketPrices
+      description: ''
+      parameters: []
+      responses: {  }
+      tags:
+        - 'Market Prices'
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                page:
+                  type: integer
+                  description: 'Must be at least 1.'
+                  example: 73
+                per_page:
+                  type: integer
+                  description: 'Must be at least 1. Must not be greater than 100.'
+                  example: 13
+                category:
+                  type: string
+                  description: 'Must not be greater than 64 characters.'
+                  example: qeopfuudtdsufvyvddqam
+                instrument:
+                  type: string
+                  description: 'Must not be greater than 64 characters.'
+                  example: niihfqcoynlazghdtqtqx
+                currency:
+                  type: string
+                  description: 'Must not be greater than 10 characters.'
+                  example: bajwbpilp
+                source:
+                  type: string
+                  description: 'Must not be greater than 128 characters.'
+                  example: mufinllwloauydlsmsjur
+      security: []
+  '/api/market-prices/{instrument}/history':
+    get:
+      summary: ''
+      operationId: getApiMarketPricesInstrumentHistory
+      description: ''
+      parameters: []
+      responses: {  }
+      tags:
+        - 'Market Prices'
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                page:
+                  type: integer
+                  description: 'Must be at least 1.'
+                  example: 73
+                per_page:
+                  type: integer
+                  description: 'Must be at least 1. Must not be greater than 100.'
+                  example: 13
+                from:
+                  type: string
+                  description: 'Must be a valid date.'
+                  example: '2026-09-16T10:44:11'
+                to:
+                  type: string
+                  description: 'Must be a valid date. Must be a date after or equal to <code>from</code>.'
+                  example: '2107-10-15'
+                source:
+                  type: string
+                  description: 'Must not be greater than 128 characters.'
+                  example: mqeopfuudtdsufvyvddqa
+      security: []
+    parameters:
+      -
+        in: path
+        name: instrument
+        description: ''
+        example: consequatur
+        required: true
+        schema:
+          type: string
+  '/api/market-prices/{instrument}':
+    get:
+      summary: ''
+      operationId: getApiMarketPricesInstrument
+      description: ''
+      parameters: []
+      responses: {  }
+      tags:
+        - 'Market Prices'
+      security: []
+    parameters:
+      -
+        in: path
+        name: instrument
+        description: ''
+        example: consequatur
+        required: true
+        schema:
+          type: string
+  /api/news:
+    get:
+      summary: ''
+      operationId: getApiNews
+      description: ''
+      parameters: []
+      responses: {  }
+      tags:
+        - News
+      security: []
+    post:
+      summary: ''
+      operationId: postApiNews
+      description: ''
+      parameters: []
+      responses: {  }
+      tags:
+        - News
+      security: []
+  '/api/news/{id}':
+    put:
+      summary: ''
+      operationId: putApiNewsId
+      description: ''
+      parameters: []
+      responses: {  }
+      tags:
+        - News
+      security: []
+    delete:
+      summary: ''
+      operationId: deleteApiNewsId
+      description: ''
+      parameters: []
+      responses: {  }
+      tags:
+        - News
+      security: []
+    parameters:
+      -
+        in: path
+        name: id
+        description: 'The ID of the news.'
+        example: consequatur
+        required: true
+        schema:
+          type: string
+  /api/ping:
+    get:
+      summary: 'Healthcheck / ping'
+      operationId: healthcheckPing
+      description: ''
+      parameters: []
+      responses: {  }
+      tags:
+        - Ping
+      security: []
+  /api/tech-trends:
+    get:
+      summary: ''
+      operationId: getApiTechTrends
+      description: ''
+      parameters: []
+      responses: {  }
+      tags:
+        - 'Tech Trends'
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                page:
+                  type: integer
+                  description: 'Must be at least 1.'
+                  example: 73
+                per_page:
+                  type: integer
+                  description: 'Must be at least 1. Must not be greater than 100.'
+                  example: 13
+                type:
+                  type: string
+                  description: 'Must not be greater than 32 characters.'
+                  example: qeopfuudtdsufvyvddqam
+                source:
+                  type: string
+                  description: 'Must not be greater than 64 characters.'
+                  example: niihfqcoynlazghdtqtqx
+                status:
+                  type: string
+                  description: 'Must not be greater than 32 characters.'
+                  example: bajwbpilpmufinllwloau
+                technology:
+                  type: string
+                  description: 'Must not be greater than 128 characters.'
+                  example: ydlsmsjuryvojcybzvrby
+                date:
+                  type: string
+                  description: 'Must be a valid date.'
+                  example: '2026-09-16T10:44:11'
+                from:
+                  type: string
+                  description: 'Must be a valid date.'
+                  example: '2026-09-16T10:44:11'
+                to:
+                  type: string
+                  description: 'Must be a valid date. Must be a date after or equal to <code>from</code>.'
+                  example: '2107-10-15'
+                q:
+                  type: string
+                  description: 'Must not be greater than 255 characters.'
+                  example: mqeopfuudtdsufvyvddqa
+      security: []
+  '/api/tech-trends/{slug}':
+    get:
+      summary: ''
+      operationId: getApiTechTrendsSlug
+      description: ''
+      parameters: []
+      responses: {  }
+      tags:
+        - 'Tech Trends'
+      security: []
+    parameters:
+      -
+        in: path
+        name: slug
+        description: 'The slug of the tech trend.'
+        example: consequatur
+        required: true
+        schema:
+          type: string
+  /api/track-visit:
+    post:
+      summary: 'Track user visit - POST /api/track-visit'
+      operationId: trackUserVisitPOSTapitrackVisit
+      description: 'Server will automatically extract all information from request'
+      parameters: []
+      responses: {  }
+      tags:
+        - 'User Visits'
+      security: []
+  '/api/track-visit/{id}':
+    get:
+      summary: 'Get visit by ID - GET /api/track-visit/{id}'
+      operationId: getVisitByIDGETapitrackVisitid
+      description: ''
+      parameters: []
+      responses: {  }
+      tags:
+        - 'User Visits'
+      security: []
+    parameters:
+      -
+        in: path
+        name: id
+        description: 'The ID of the track visit.'
+        example: consequatur
+        required: true
+        schema:
+          type: string
