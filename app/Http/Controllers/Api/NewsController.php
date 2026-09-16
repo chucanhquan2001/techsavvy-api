@@ -14,6 +14,9 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Throwable;
 
+/**
+ * @group News
+ */
 class NewsController extends Controller
 {
     public function index(GetNewsListUseCase $useCase)

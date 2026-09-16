@@ -3,22 +3,38 @@
 namespace App\Helpers;
 
 use App\Enums\HttpStatus;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Http\JsonResponse;
 
 class ApiResponse
 {
-    public static function ok($data = null, string $message = 'Success', int $code = HttpStatus::OK): JsonResponse
+    public static function ok($data = null, string $message = 'Success', int $code = HttpStatus::OK, array $meta = []): JsonResponse
     {
         return response()->json([
             'status' => 'ok',
             'message' => $message,
             'data' => $data,
             'errors' => null,
-            'meta' => [
+            'meta' => array_merge([
                 'timestamp' => now()->toISOString(),
                 'path' => request()->path(),
-            ],
+            ], $meta),
         ], $code);
+    }
+
+    public static function paginated(LengthAwarePaginator $paginator, string $message = 'Success'): JsonResponse
+    {
+        return self::ok(
+            array_values($paginator->items()),
+            $message,
+            HttpStatus::OK,
+            [
+                'current_page' => $paginator->currentPage(),
+                'per_page' => $paginator->perPage(),
+                'total' => $paginator->total(),
+                'last_page' => $paginator->lastPage(),
+            ]
+        );
     }
 
     public static function fail(string $message = 'Invalid request', array $errors = [], int $code = HttpStatus::BAD_REQUEST): JsonResponse

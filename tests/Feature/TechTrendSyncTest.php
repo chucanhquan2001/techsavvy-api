@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use App\Application\TechDiscovery\UseCases\SyncTechTrendsUseCase;
+use App\Models\TechTrendItem;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Http;
 use Tests\TestCase;
@@ -73,7 +74,7 @@ class TechTrendSyncTest extends TestCase
 
     public function test_api_returns_paginated_tech_trends(): void
     {
-        \App\Models\TechTrendItem::query()->create([
+        TechTrendItem::query()->create([
             'type' => 'repository',
             'source' => 'github_trending',
             'source_url' => 'https://github.com/trending?since=daily',
@@ -84,6 +85,7 @@ class TechTrendSyncTest extends TestCase
             'summary' => 'A useful developer tool.',
             'technologies' => ['Laravel', 'AI'],
             'topics' => ['developer-tools'],
+            'raw_payload' => ['secret' => 'value'],
             'content_hash' => hash('sha256', 'demo'),
             'trend_date' => '2026-06-11',
             'status' => 'ready',
@@ -93,7 +95,94 @@ class TechTrendSyncTest extends TestCase
 
         $response->assertOk()
             ->assertJsonPath('status', 'ok')
-            ->assertJsonPath('data.data.0.external_id', 'acme/demo-tool');
+            ->assertJsonPath('data.0.external_id', 'acme/demo-tool')
+            ->assertJsonPath('meta.current_page', 1)
+            ->assertJsonPath('meta.per_page', 20)
+            ->assertJsonPath('meta.total', 1)
+            ->assertJsonMissingPath('data.0.raw_payload')
+            ->assertJsonMissingPath('data.0.content_hash');
+    }
+
+    public function test_api_rejects_invalid_per_page(): void
+    {
+        $response = $this->getJson('/api/tech-trends?per_page=0');
+
+        $response->assertStatus(422)
+            ->assertJsonPath('status', 'fail');
+    }
+
+    public function test_api_filters_by_date_range_and_search(): void
+    {
+        TechTrendItem::query()->create([
+            'type' => 'repository',
+            'source' => 'github_trending',
+            'source_url' => 'https://github.com/trending?since=daily',
+            'external_id' => 'acme/in-range',
+            'title' => 'Laravel AI Toolkit',
+            'slug' => 'laravel-ai-toolkit-2026-06-11',
+            'url' => 'https://github.com/acme/toolkit',
+            'summary' => 'Useful AI tooling.',
+            'technologies' => ['Laravel'],
+            'content_hash' => hash('sha256', 'in-range'),
+            'trend_date' => '2026-06-11',
+            'status' => 'ready',
+        ]);
+
+        TechTrendItem::query()->create([
+            'type' => 'repository',
+            'source' => 'github_trending',
+            'source_url' => 'https://github.com/trending?since=daily',
+            'external_id' => 'acme/out-of-range',
+            'title' => 'Old Project',
+            'slug' => 'old-project-2026-05-01',
+            'url' => 'https://github.com/acme/old',
+            'summary' => 'Out of range.',
+            'technologies' => ['PHP'],
+            'content_hash' => hash('sha256', 'out'),
+            'trend_date' => '2026-05-01',
+            'status' => 'ready',
+        ]);
+
+        $response = $this->getJson('/api/tech-trends?from=2026-06-01&to=2026-06-30&q=Laravel');
+
+        $response->assertOk()
+            ->assertJsonPath('meta.total', 1)
+            ->assertJsonPath('data.0.external_id', 'acme/in-range');
+    }
+
+    public function test_api_returns_404_for_missing_tech_trend(): void
+    {
+        $response = $this->getJson('/api/tech-trends/missing-slug');
+
+        $response->assertStatus(404)
+            ->assertJsonPath('status', 'fail')
+            ->assertJsonPath('message', 'Tech trend not found');
+    }
+
+    public function test_api_hides_internal_fields_on_show(): void
+    {
+        TechTrendItem::query()->create([
+            'type' => 'repository',
+            'source' => 'github_trending',
+            'source_url' => 'https://github.com/trending?since=daily',
+            'external_id' => 'acme/demo-tool',
+            'title' => 'acme/demo-tool',
+            'slug' => 'acme-demo-tool-github-trending-2026-06-11',
+            'url' => 'https://github.com/acme/demo-tool',
+            'summary' => 'A useful developer tool.',
+            'technologies' => ['Laravel'],
+            'raw_payload' => ['secret' => 'value'],
+            'content_hash' => hash('sha256', 'demo'),
+            'trend_date' => '2026-06-11',
+            'status' => 'ready',
+        ]);
+
+        $response = $this->getJson('/api/tech-trends/acme-demo-tool-github-trending-2026-06-11');
+
+        $response->assertOk()
+            ->assertJsonPath('data.slug', 'acme-demo-tool-github-trending-2026-06-11')
+            ->assertJsonMissingPath('data.raw_payload')
+            ->assertJsonMissingPath('data.content_hash');
     }
 
     private function githubTrendingHtml(): string

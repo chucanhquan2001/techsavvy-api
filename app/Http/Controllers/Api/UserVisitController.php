@@ -11,6 +11,9 @@ use App\Services\RequestInfoExtractor;
 use Illuminate\Http\Request;
 use Throwable;
 
+/**
+ * @group User Visits
+ */
 class UserVisitController extends Controller
 {
     public function __construct(

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
 class MarketPriceHistory extends Model
@@ -25,4 +26,15 @@ class MarketPriceHistory extends Model
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
     ];
+
+    /**
+     * @param  array<string, mixed>  $filters
+     */
+    public function scopeFilter(Builder $query, array $filters): Builder
+    {
+        return $query
+            ->when(! empty($filters['source']), fn (Builder $q) => $q->where('source', (string) $filters['source']))
+            ->when(! empty($filters['from']), fn (Builder $q) => $q->whereDate('quoted_at', '>=', $filters['from']))
+            ->when(! empty($filters['to']), fn (Builder $q) => $q->whereDate('quoted_at', '<=', $filters['to']));
+    }
 }

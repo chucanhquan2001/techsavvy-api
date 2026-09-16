@@ -11,6 +11,9 @@ use App\Http\Requests\StoreContactRequest;
 use App\Services\ContactNotificationService;
 use Throwable;
 
+/**
+ * @group Contact
+ */
 class ContactController extends Controller
 {
     /**
